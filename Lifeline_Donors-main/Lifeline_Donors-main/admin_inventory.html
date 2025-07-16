@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Inventory - Lifeline Donor's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #b71c1c;
+            padding: 15px 0;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        nav a i {
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .add-btn:hover {
+            background-color: #45a049;
+        }
+
+        .export-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .export-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filters select {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            min-width: 150px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filters select:hover {
+            border-color: #2196F3;
+        }
+
+        .filters select:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+        }
+
+        .district-panel {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .district-panel h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .district-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .district-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .district-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .district-card h4 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .district-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .stat-item span {
+            display: block;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 1.2rem;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .edit-btn, .delete-btn {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: white;
+            margin: 50px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .close {
+            font-size: 24px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196F3;
+            box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn, .save-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+
+        .blood-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .blood-type {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .blood-type label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .blood-type input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .search-filters {
+                flex-direction: column;
+            }
+
+            .filters {
+                flex-wrap: wrap;
+            }
+
+            .filters select {
+                width: 100%;
+            }
+
+            .modal-content {
+                margin: 20px;
+                width: auto;
+            }
+
+            .blood-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lifeline Donor's</h1>
+    </header>
+
+    <nav>
+        <a href="admindashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="admin_donors.html"><i class="fas fa-users"></i> Manage Donors</a>
+        <a href="admin_inventory.html"><i class="fas fa-vial"></i> Blood Inventory</a>
+        <a href="admin_camps.html"><i class="fas fa-hospital"></i> Manage Camps</a>
+        <a href="admin_users.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+        <a href="admin_reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+        <a href="Home Page Code.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="container">
+        <div class="actions">
+            <button class="action-btn add-btn" onclick="openAddHospitalModal()">
+                <i class="fas fa-plus"></i> Add Hospital
+            </button>
+            <button class="action-btn export-btn" onclick="exportInventory()">
+                <i class="fas fa-file-export"></i> Export Report
+            </button>
+        </div>
+
+        <div class="district-panel">
+            <h3>District Overview</h3>
+            <div class="district-grid" id="districtGrid">
+                <!-- Districts will be loaded here dynamically -->
+            </div>
+        </div>
+
+        <div class="search-filters">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search by hospital name or location..." onkeyup="searchInventory()">
+                <i class="fas fa-search"></i>
+            </div>
+            <div class="filters">
+                <select id="districtFilter" onchange="filterInventory()">
+                    <option value="">All Districts</option>
+                    <!-- Districts will be loaded here dynamically -->
+                </select>
+                <select id="bloodTypeFilter" onchange="filterInventory()">
+                    <option value="">All Blood Types</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hospital Name</th>
+                        <th>District</th>
+                        <th>City</th>
+                        <th>A+</th>
+                        <th>A-</th>
+                        <th>B+</th>
+                        <th>B-</th>
+                        <th>AB+</th>
+                        <th>AB-</th>
+                        <th>O+</th>
+                        <th>O-</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="inventoryTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add/Edit Hospital Modal -->
+    <div id="hospitalModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Hospital</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="hospitalForm">
+                <div class="form-group">
+                    <label for="hospital">Hospital Name</label>
+                    <input type="text" id="hospital" name="hospital" required>
+                </div>
+                <div class="form-group">
+                    <label for="district">District</label>
+                    <input type="text" id="district" name="district" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                <div class="blood-grid">
+                    <div class="blood-type">
+                        <label for="A+">A+</label>
+                        <input type="number" id="A+" name="A+" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="A-">A-</label>
+                        <input type="number" id="A-" name="A-" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="B+">B+</label>
+                        <input type="number" id="B+" name="B+" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="B-">B-</label>
+                        <input type="number" id="B-" name="B-" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="AB+">AB+</label>
+                        <input type="number" id="AB+" name="AB+" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="AB-">AB-</label>
+                        <input type="number" id="AB-" name="AB-" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="O+">O+</label>
+                        <input type="number" id="O+" name="O+" min="0" required>
+                    </div>
+                    <div class="blood-type">
+                        <label for="O-">O-</label>
+                        <input type="number" id="O-" name="O-" min="0" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Load inventory when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadInventory();
+        });
+
+        function loadInventory() {
+            fetch('admin_inventory.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=get_all'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    updateInventoryTable(data.data);
+                    updateDistrictPanel(data.data);
+                    updateDistrictFilter(data.data);
+                } else {
+                    alert('Error loading inventory: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error loading inventory');
+            });
+        }
+
+        function updateInventoryTable(inventory) {
+            const tbody = document.getElementById('inventoryTableBody');
+            tbody.innerHTML = '';
+
+            inventory.forEach(hospital => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${hospital.hospital}</td>
+                    <td>${hospital.district}</td>
+                    <td>${hospital.city}</td>
+                    <td>${hospital['A+']}</td>
+                    <td>${hospital['A-']}</td>
+                    <td>${hospital['B+']}</td>
+                    <td>${hospital['B-']}</td>
+                    <td>${hospital['AB+']}</td>
+                    <td>${hospital['AB-']}</td>
+                    <td>${hospital['O+']}</td>
+                    <td>${hospital['O-']}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editHospital('${hospital.hospital}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteHospital('${hospital.hospital}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateDistrictPanel(inventory) {
+            const districtGrid = document.getElementById('districtGrid');
+            const districts = {};
+            
+            // Calculate statistics for each district
+            inventory.forEach(hospital => {
+                if (!districts[hospital.district]) {
+                    districts[hospital.district] = {
+                        hospitals: 0,
+                        totalUnits: 0,
+                        lowStock: 0
+                    };
+                }
+                
+                districts[hospital.district].hospitals++;
+                
+                // Calculate total units and low stock
+                const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+                bloodTypes.forEach(type => {
+                    districts[hospital.district].totalUnits += hospital[type];
+                    if (hospital[type] < 5) {
+                        districts[hospital.district].lowStock++;
+                    }
+                });
+            });
+            
+            // Create district cards
+            districtGrid.innerHTML = '';
+            Object.entries(districts).forEach(([district, stats]) => {
+                const card = document.createElement('div');
+                card.className = 'district-card';
+                card.innerHTML = `
+                    <h4>${district}</h4>
+                    <div class="district-stats">
+                        <div class="stat-item">
+                            <span>Hospitals</span>
+                            <strong>${stats.hospitals}</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Total Units</span>
+                            <strong>${stats.totalUnits}</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Low Stock</span>
+                            <strong>${stats.lowStock}</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Status</span>
+                            <strong style="color: ${stats.lowStock > 0 ? '#f44336' : '#4CAF50'}">
+                                ${stats.lowStock > 0 ? 'Needs Attention' : 'Good'}
+                            </strong>
+                        </div>
+                    </div>
+                `;
+                districtGrid.appendChild(card);
+            });
+        }
+
+        function updateDistrictFilter(inventory) {
+            const districtFilter = document.getElementById('districtFilter');
+            const districts = new Set();
+            
+            inventory.forEach(hospital => {
+                districts.add(hospital.district);
+            });
+            
+            // Clear existing options except the first one
+            while (districtFilter.options.length > 1) {
+                districtFilter.remove(1);
+            }
+            
+            // Add district options
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district.toLowerCase();
+                option.textContent = district;
+                districtFilter.appendChild(option);
+            });
+        }
+
+        function openAddHospitalModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Hospital';
+            document.getElementById('hospitalForm').reset();
+            document.getElementById('hospitalModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('hospitalModal').style.display = 'none';
+        }
+
+        function editHospital(hospital) {
+            fetch('admin_inventory.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=get_all'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const hospitalData = data.data.find(h => h.hospital === hospital);
+                    if (hospitalData) {
+                        document.getElementById('modalTitle').textContent = 'Edit Hospital';
+                        document.getElementById('hospital').value = hospitalData.hospital;
+                        document.getElementById('district').value = hospitalData.district;
+                        document.getElementById('city').value = hospitalData.city;
+                        document.getElementById('A+').value = hospitalData['A+'];
+                        document.getElementById('A-').value = hospitalData['A-'];
+                        document.getElementById('B+').value = hospitalData['B+'];
+                        document.getElementById('B-').value = hospitalData['B-'];
+                        document.getElementById('AB+').value = hospitalData['AB+'];
+                        document.getElementById('AB-').value = hospitalData['AB-'];
+                        document.getElementById('O+').value = hospitalData['O+'];
+                        document.getElementById('O-').value = hospitalData['O-'];
+                        document.getElementById('hospitalModal').style.display = 'block';
+                    }
+                }
+            });
+        }
+
+        function deleteHospital(hospital) {
+            if (confirm('Are you sure you want to delete this hospital?')) {
+                fetch('admin_inventory.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=delete_hospital&hospital=${encodeURIComponent(hospital)}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Hospital deleted successfully');
+                        loadInventory();
+                    } else {
+                        alert('Error deleting hospital: ' + data.message);
+                    }
+                });
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('hospitalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const action = document.getElementById('modalTitle').textContent === 'Add New Hospital' ? 'add_hospital' : 'update';
+            formData.append('action', action);
+
+            fetch('admin_inventory.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    closeModal();
+                    loadInventory();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('hospitalModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Search functionality
+        function searchInventory() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.getElementById('inventoryTableBody').getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const hospital = row.cells[0].textContent.toLowerCase();
+                const district = row.cells[1].textContent.toLowerCase();
+                const city = row.cells[2].textContent.toLowerCase();
+
+                if (hospital.includes(searchTerm) || district.includes(searchTerm) || city.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+
+        // Filter functionality
+        function filterInventory() {
+            const district = document.getElementById('districtFilter').value.toLowerCase();
+            const bloodType = document.getElementById('bloodTypeFilter').value;
+            const rows = document.getElementById('inventoryTableBody').getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const rowDistrict = row.cells[1].textContent.toLowerCase();
+                const bloodTypeValue = parseInt(row.cells[bloodType === 'A+' ? 3 : 
+                    bloodType === 'A-' ? 4 :
+                    bloodType === 'B+' ? 5 :
+                    bloodType === 'B-' ? 6 :
+                    bloodType === 'AB+' ? 7 :
+                    bloodType === 'AB-' ? 8 :
+                    bloodType === 'O+' ? 9 :
+                    bloodType === 'O-' ? 10 : 3].textContent);
+
+                let showRow = true;
+
+                if (district && rowDistrict !== district) {
+                    showRow = false;
+                }
+
+                if (bloodType && bloodTypeValue === 0) {
+                    showRow = false;
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            }
+        }
+
+        // Export functionality
+        function exportInventory() {
+            fetch('admin_inventory.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'action=get_all'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const csvContent = "data:text/csv;charset=utf-8," 
+                        + "Hospital Name,District,City,A+,A-,B+,B-,AB+,AB-,O+,O-\n"
+                        + data.data.map(hospital => 
+                            `${hospital.hospital},${hospital.district},${hospital.city},${hospital['A+']},${hospital['A-']},${hospital['B+']},${hospital['B-']},${hospital['AB+']},${hospital['AB-']},${hospital['O+']},${hospital['O-']}`
+                        ).join("\n");
+
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "blood_inventory.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

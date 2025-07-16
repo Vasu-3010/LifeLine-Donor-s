@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - Lifeline Donor's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+        }
+
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #b71c1c;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffd54f;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .export-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .print-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .date-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .date-filter select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .chart-container h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .report-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        .trend-up {
+            color: #4CAF50;
+        }
+
+        .trend-down {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lifeline Donor's</h1>
+    </header>
+
+    <nav>
+        <a href="admindashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="admin_donors.html"><i class="fas fa-users"></i> Manage Donors</a>
+        <a href="admin_inventory.html"><i class="fas fa-vial"></i> Blood Inventory</a>
+        <a href="admin_camps.html"><i class="fas fa-hospital"></i> Manage Camps</a>
+        <a href="admin_users.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+        <a href="admin_reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+        <a href="Home Page Code.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <div class="container">
+        <div class="actions">
+            <button class="action-btn export-btn" onclick="exportReport()">
+                <i class="fas fa-file-export"></i> Export Report
+            </button>
+            <button class="action-btn print-btn" onclick="printReport()">
+                <i class="fas fa-print"></i> Print Report
+            </button>
+        </div>
+
+        <div class="date-filter">
+            <select onchange="updateReports()">
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+                <option value="365">Last year</option>
+            </select>
+            <select onchange="updateReports()">
+                <option value="all">All Blood Types</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+            </select>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Donations</h3>
+                <div class="number">1,234</div>
+                <div class="trend-up">↑ 12% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Donors</h3>
+                <div class="number">856</div>
+                <div class="trend-up">↑ 8% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Blood Units Used</h3>
+                <div class="number">789</div>
+                <div class="trend-down">↓ 3% from last month</div>
+            </div>
+            <div class="stat-card">
+                <h3>Camp Attendance</h3>
+                <div class="number">92%</div>
+                <div class="trend-up">↑ 5% from last month</div>
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2>Donation Trends</h2>
+                <div class="chart-wrapper">
+                    <canvas id="donationTrendsChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h2>Blood Type Distribution</h2>
+                <div class="chart-wrapper">
+                    <canvas id="bloodTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Camp Performance</h2>
+            <div class="chart-wrapper">
+                <canvas id="campPerformanceChart"></canvas>
+            </div>
+        </div>
+
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Blood Type</th>
+                    <th>Donations</th>
+                    <th>Used</th>
+                    <th>Available</th>
+                    <th>Camp</th>
+                </tr>
+            </thead>
+            <tbody id="reportTableBody">
+                <!-- Will be populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Sample data
+        const reportData = {
+            dates: ['2024-03-01', '2024-03-02', '2024-03-03', '2024-03-04', '2024-03-05'],
+            donations: [45, 52, 38, 41, 48],
+            bloodTypes: {
+                'A+': 35,
+                'A-': 15,
+                'B+': 25,
+                'B-': 10,
+                'AB+': 8,
+                'AB-': 5,
+                'O+': 40,
+                'O-': 12
+            },
+            campPerformance: {
+                labels: ['Camp 1', 'Camp 2', 'Camp 3', 'Camp 4', 'Camp 5'],
+                expected: [50, 75, 60, 45, 55],
+                actual: [48, 72, 58, 42, 53]
+            }
+        };
+
+        // Initialize Charts
+        function initializeCharts() {
+            // Donation Trends Chart
+            const trendsCtx = document.getElementById('donationTrendsChart').getContext('2d');
+            new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: reportData.dates,
+                    datasets: [{
+                        label: 'Daily Donations',
+                        data: reportData.donations,
+                        borderColor: '#d32f2f',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Blood Type Distribution Chart
+            const bloodTypeCtx = document.getElementById('bloodTypeChart').getContext('2d');
+            new Chart(bloodTypeCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(reportData.bloodTypes),
+                    datasets: [{
+                        data: Object.values(reportData.bloodTypes),
+                        backgroundColor: [
+                            '#f44336', '#e91e63', '#9c27b0', '#673ab7',
+                            '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Camp Performance Chart
+            const campCtx = document.getElementById('campPerformanceChart').getContext('2d');
+            new Chart(campCtx, {
+                type: 'bar',
+                data: {
+                    labels: reportData.campPerformance.labels,
+                    datasets: [
+                        {
+                            label: 'Expected Donors',
+                            data: reportData.campPerformance.expected,
+                            backgroundColor: '#2196f3'
+                        },
+                        {
+                            label: 'Actual Donors',
+                            data: reportData.campPerformance.actual,
+                            backgroundColor: '#4caf50'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateReportTable() {
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+
+            // Sample data for the table
+            const tableData = [
+                {
+                    date: '2024-03-15',
+                    bloodType: 'A+',
+                    donations: 12,
+                    used: 8,
+                    available: 45,
+                    camp: 'Community Drive'
+                },
+                {
+                    date: '2024-03-14',
+                    bloodType: 'O+',
+                    donations: 15,
+                    used: 10,
+                    available: 52,
+                    camp: 'Corporate Camp'
+                }
+            ];
+
+            tableData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.date}</td>
+                    <td>${row.bloodType}</td>
+                    <td>${row.donations}</td>
+                    <td>${row.used}</td>
+                    <td>${row.available}</td>
+                    <td>${row.camp}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateReports() {
+            // Implementation for updating reports based on filters
+            alert('Reports updated!');
+        }
+
+        function exportReport() {
+            // Implementation for exporting report
+            alert('Report exported successfully!');
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        // Initialize charts and table
+        initializeCharts();
+        updateReportTable();
+    </script>
+</body>
+</html> 

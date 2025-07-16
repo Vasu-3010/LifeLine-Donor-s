@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+h2 {
+    color: #dc3545;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.table th {
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+
+.table td {
+    text-align: center;
+}
+
+.search-box {
+    max-width: 300px;
+    margin: auto;
+}
+
+button.btn-danger {
+    width: 100%;
+}
+
+select.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}

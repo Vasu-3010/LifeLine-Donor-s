@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact US</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+
+    <style>
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-left: 20px;
+            font-family: 'Satisfy', cursive;
+            background: linear-gradient(to right, rgb(245, 2, 2), rgb(245, 2, 2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+
+        .close:hover {
+            color: #ff4444;
+        }
+
+        nav {
+            background: linear-gradient(45deg, #2f3b45, #2f3b45);
+            padding: 20px;
+            margin: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .body {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            height: 100vh;
+        }
+
+        .main {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 400px;
+            height: 450px;
+            margin: 50px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .bt {
+            color: white;
+            font-weight: bold;
+            background: purple;
+            padding: 10px 15px;
+            border-radius: 100px;
+            width: 100px;
+            cursor: pointer;
+            font-size: larger;
+            border: none;
+        }
+
+        .bt:hover {
+            background: rgb(214, 4, 4);
+            transform: scale(1.1);
+        }
+
+        .bt:active {
+            background: rgb(207, 77, 77);
+            transform: scale(1.1);
+        }
+
+        textarea {
+            width: 60%;
+            height: 50px;
+            padding: 10px;
+            font-size: 16px;
+            font-family: Calibri;
+            border-radius: 100px;
+            border: none;
+            background: rgba(255, 255, 255, 0.402);
+            resize: none;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #666;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            width: 60%;
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.402);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Lifeline Donor's</div>
+        </nav>
+    </header>
+
+    <section class="main">
+        <div class="First">
+            <span class="close" onclick="window.location.href='Home Page Code.html'">&times;</span>
+            <h1>Contact US !</h1>
+            <form action="contact_submit.php" method="POST">
+                <label for="username" style="font-size:larger">Username</label><br>
+                <input type="text" name="username" required placeholder="Enter your name"><br><br>
+
+                <label for="email" style="font-size:larger">Email ID</label><br>
+                <input type="email" name="email" required placeholder="Enter your email id"><br><br>
+
+                <label for="message" style="font-size:larger">Message</label><br>
+                <textarea name="message" required placeholder="Enter Message"></textarea><br><br>
+
+                <button type="submit" class="bt">Submit</button><br><br>
+
+                Did not have Account?
+                <a class="li" href="signuppage.html" style="color:rgb(29,42,54);font-size:small;">Sign up</a>
+            </form>
+        </div>
+    </section>
+</body>
+
+</html>

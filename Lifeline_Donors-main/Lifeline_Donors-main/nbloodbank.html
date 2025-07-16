@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearest Blood Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lookblood.CSS">
+    <style>
+         
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-left: 20px; /* Moves logo to the left */
+            font-family: 'Satisfy',cursive;
+            /*color: (rgb(126,53,53),rgb(165, 18, 165));*/
+            background: linear-gradient(to right,rgb(245,2,2),rgb(245, 2, 2));
+           /* background: linear-gradient(45deg, rgb(68, 52, 238), rgba(81, 37, 223, 0.648));*/
+           -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+        .close:hover {
+            color: #ff4444;
+        }
+
+        nav {
+            background-color: rgb(0, 0, 0);
+            /*background: linear-gradient(to right,blue-turquoise);
+            box-shadow: inset 0 -15px 30px rgba(224, 26, 26, 0.381);*/
+            background: linear-gradient(45deg,#2f3b45,#2f3b45);
+            
+             padding: 20px;
+             margin:  -20px;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+         }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .body{
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        .main1 {
+            background-color: rgb(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            text-align:center;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 425px;
+            margin: 50px 500px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .main2 {
+            background-color: rgb(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            text-align:center;
+            justify-content: center;
+            align-items: center;
+            margin: 50px 350px;
+            /*position: relative;*/
+            width: 700px;
+            height: 500px;
+            
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-wrapper {
+            margin-top: 20px; /* Moves the table to the top */
+            text-align: center; /* Centers horizontally */
+            margin: 50px;
+        }
+/*
+        .table-wrapper th{
+            margin: 100px;
+        }
+*/        
+
+        .form-control{
+            font-family: Calibri; 
+            width: 60%; 
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius:50px; 
+            background: rgb(255,255,255,0.402);
+        }
+
+        .bt {
+            background: linear-gradient(45deg, #800080, #ff4444);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bt:hover {
+            background: linear-gradient(45deg, #ff4444, #800080);
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bt:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .li:hover{
+            -webkit-text-fill-color: red;
+
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+        .close:hover {
+            color: #ff4444;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Lifeline Donor's</div> 
+        </nav>
+    </header>
+
+
+    <section class="main1">
+        <span class="close">&times;</span>
+        <div class="container mt-4">
+            <h2 class="text-danger">Nearest Blood Bank (BB)</h2>
+            <div class="row mb-3">
+                
+                <label>District</label><br>
+                <div class="col-md-3">
+                    <select id="district" class="form-control" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);">
+                        <!-- onchange="updateCities()"> -->
+                        <option>Select District</option><br><br>
+                    </select><br><br>
+                </div>
+
+                <label>City</label><br>
+                <div class="col-md-3">
+                    <select id="city" class="form-control" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);">
+                        <!-- onchange="updateCities()"> -->
+                        <option>Select City</option><br><br>
+                    </select>
+                </div>
+
+                <div class="col-md-3 mt-2">
+                    <br><br><button class="bt" onclick="filterResults()">Search</button>
+                </div>
+            </div>
+    </section>
+
+    <!-- <script>
+        const districtData = {
+            "Ahmedabad": {"cities": ["Ahmedabad City", "Bavla", "Daskroi", "Dhandhuka", "Dholera", "Dholka", "Mandal", "Sanand", "Viramgam"]},
+            "Amreli": {"cities": ["Amreli", "Bagasara", "Dhari", "Jafrabad", "Khambha", "Kukavav", "Lathi", "Rajula", "Savarkundla"]},
+            "Anand": {"cities": ["Anand", "Borsad", "Petlad", "Khambhat", "Sojitra", "Tarapur", "Umreth", "Anklav"]},
+            "Aravalli": {"cities": ["Bayad", "Bhiloda", "Dhansura", "Malpur", "Meghraj", "Modasa"]},
+            "Banaskantha": {"cities": ["Amirgadh", "Bhabhar", "Danta", "Deesa", "Dhanera", "Dantiwada", "Kankrej", "Lakhani", "Palanpur", "Suigam", "Tharad", "Vadgam", "Vav"]},
+            "Bharuch": {"cities": ["Amod", "Ankleshwar", "Bharuch", "Hansot", "Jambusar", "Jhagadia", "Netrang", "Vagra", "Valia"]},
+            "Bhavnagar": {"cities": ["Bhavnagar", "Botad", "Gadhada", "Ghogha", "Jesar", "Mahuva", "Palitana", "Sihor", "Talaja", "Umrala"]},
+            "Botad": {"cities": ["Botad", "Gadhada", "Barvala", "Ranpur"]},
+            "Chhota Udaipur": {"cities": ["Bodeli", "Chhota Udaipur", "Kavant", "Naswadi", "Pavi Jetpur", "Sankheda"]},
+            "Dahod": {"cities": ["Dahod", "Devgad Baria", "Dhanpur", "Fatepura", "Garbada", "Limkheda", "Santrampur", "Jhalod"]},
+            "Dang": {"cities": ["Ahwa", "Subir", "Waghai"]},
+            "Devbhoomi Dwarka": {"cities": ["Bhanvad", "Dwarka", "Khambhalia", "Kalyanpur"]},
+            "Gandhinagar": {"cities": ["Dehgam", "Gandhinagar", "Kalol", "Mansa"]},
+            "Gir Somnath": {"cities": ["Gir Gadhada", "Kodinar", "Sutrapada", "Talala", "Una", "Veraval"]},
+            "Jamnagar": {"cities": ["Dhrol", "Jamjodhpur", "Jamnagar", "Jodiya", "Kalavad", "Lalpur"]},
+            "Junagadh": {"cities": ["Bhesan", "Junagadh", "Keshod", "Malia", "Manavadar", "Mangrol", "Mendarda", "Vanthali", "Visavadar"]},
+            "Kheda": {"cities": ["Kheda", "Kapadvanj", "Kathlal", "Matar", "Mehmedabad", "Mahudha", "Nadiad", "Thasra", "Virpur"]},
+            "Kutch": {"cities": ["Abdasa", "Anjar", "Bhachau", "Bhuj", "Gandhidham", "Lakhpat", "Mandvi", "Mundra", "Nakhatrana", "Rapar"]},
+            "Mahisagar": {"cities": ["Balasinor", "Kadana", "Khanpur", "Lunawada", "Santrampur", "Virpur"]},
+            "Mehsana": {"cities": ["Becharaji", "Jotana", "Kadi", "Kheralu", "Mehsana", "Satlasana", "Unjha", "Vijapur", "Visnagar"]},
+            "Morbi": {"cities": ["Halvad", "Morbi", "Maliya", "Tankara", "Wankaner"]},
+            "Narmada": {"cities": ["Dediapada", "Garudeshwar", "Nandod", "Sagbara", "Tilakwada"]},
+            "Navsari": {"cities": ["Chikhli", "Gandevi", "Jalalpore", "Khergam", "Navsari", "Vansda"]},
+            "Panchmahal": {"cities": ["Ghoghamba", "Godhra", "Halol", "Jambughoda", "Kalol", "Morwa Hadaf", "Shehera"]},
+            "Patan": {"cities": ["Chanasma", "Harij", "Patan", "Radhanpur", "Sami", "Sidhpur"]},
+            "Porbandar": {"cities": ["Kutiyana", "Porbandar", "Ranavav"]},
+            "Rajkot": {"cities": ["Dhoraji", "Gondal", "Jamkandorna", "Jasdan", "Jetpur", "Kotda Sangani", "Lodhika", "Morbi", "Rajkot", "Upleta", "Wankaner"]},
+            "Sabarkantha": {"cities": ["Bayad", "Dhansura", "Himatnagar", "Idar", "Khedbrahma", "Poshina", "Prantij", "Talod", "Vijaynagar"]},
+            "Surat": {"cities": ["Bardoli", "Choryasi", "Kamrej", "Mahuva", "Mandvi", "Mangrol", "Olpad", "Palsana", "Umarpada"]},
+            "Surendranagar": {"cities": ["Chotila", "Dhrangadhra", "Halvad", "Lakhtar", "Limbdi", "Muli", "Patdi", "Sayla", "Thangadh", "Wadhwan"]},
+            "Tapi": {"cities": ["Dolvan", "Nizar", "Songadh", "Uchchhal", "Valod", "Vyara"]},
+            "Vadodara": {"cities": ["Dabhoi", "Karjan", "Padra", "Savli", "Vadodara", "Waghodia"]},
+            "Valsad": {"cities": ["Dharampur", "Kaprada", "Pardi", "Umbergaon", "Valsad", "Vapi"]}
+        };
+        
+        window.onload = function () {
+            let districtSelect = document.getElementById("district");
+            Object.keys(districtData).forEach(district => {
+                let option = document.createElement("option");
+                option.textContent = district;
+                option.value = district;
+                districtSelect.appendChild(option);
+            });
+        };
+        
+        function updateCities() {
+            let district = document.getElementById("district").value;
+            let citySelect = document.getElementById("city");
+            citySelect.innerHTML = "<option>Select City</option>";
+            
+            if (districtData[district]) {
+                districtData[district].cities.forEach(city => {
+                    let option = document.createElement("option");
+                    option.textContent = city;
+                    option.value = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }        
+    </script> -->
+    <script>
+        const districtData = {
+            "Ahmedabad": {"cities": ["Ahmedabad City", "Bavla", "Daskroi", "Dhandhuka", "Dholera", "Dholka", "Mandal", "Sanand", "Viramgam"]},
+            "Amreli": {"cities": ["Amreli", "Bagasara", "Dhari", "Jafrabad", "Khambha", "Kukavav", "Lathi", "Rajula", "Savarkundla"]},
+            "Anand": {"cities": ["Anand", "Borsad", "Petlad", "Khambhat", "Sojitra", "Tarapur", "Umreth", "Anklav"]},
+            "Aravalli": {"cities": ["Bayad", "Bhiloda", "Dhansura", "Malpur", "Meghraj", "Modasa"]},
+            "Banaskantha": {"cities": ["Amirgadh", "Bhabhar", "Danta", "Deesa", "Dhanera", "Dantiwada", "Kankrej", "Lakhani", "Palanpur", "Suigam", "Tharad", "Vadgam", "Vav"]},
+            "Bharuch": {"cities": ["Amod", "Ankleshwar", "Bharuch", "Hansot", "Jambusar", "Jhagadia", "Netrang", "Vagra", "Valia"]},
+            "Bhavnagar": {"cities": ["Bhavnagar", "Botad", "Gadhada", "Ghogha", "Jesar", "Mahuva", "Palitana", "Sihor", "Talaja", "Umrala"]},
+            "Botad": {"cities": ["Botad", "Gadhada", "Barvala", "Ranpur"]},
+            "Chhota Udaipur": {"cities": ["Bodeli", "Chhota Udaipur", "Kavant", "Naswadi", "Pavi Jetpur", "Sankheda"]},
+            "Dahod": {"cities": ["Dahod", "Devgad Baria", "Dhanpur", "Fatepura", "Garbada", "Limkheda", "Santrampur", "Jhalod"]},
+            "Dang": {"cities": ["Ahwa", "Subir", "Waghai"]},
+            "Devbhoomi Dwarka": {"cities": ["Bhanvad", "Dwarka", "Khambhalia", "Kalyanpur"]},
+            "Gandhinagar": {"cities": ["Dehgam", "Gandhinagar", "Kalol", "Mansa"]},
+            "Gir Somnath": {"cities": ["Gir Gadhada", "Kodinar", "Sutrapada", "Talala", "Una", "Veraval"]},
+            "Jamnagar": {"cities": ["Dhrol", "Jamjodhpur", "Jamnagar", "Jodiya", "Kalavad", "Lalpur"]},
+            "Junagadh": {"cities": ["Bhesan", "Junagadh", "Keshod", "Malia", "Manavadar", "Mangrol", "Mendarda", "Vanthali", "Visavadar"]},
+            "Kheda": {"cities": ["Kheda", "Kapadvanj", "Kathlal", "Matar", "Mehmedabad", "Mahudha", "Nadiad", "Thasra", "Virpur"]},
+            "Kutch": {"cities": ["Abdasa", "Anjar", "Bhachau", "Bhuj", "Gandhidham", "Lakhpat", "Mandvi", "Mundra", "Nakhatrana", "Rapar"]},
+            "Mahisagar": {"cities": ["Balasinor", "Kadana", "Khanpur", "Lunawada", "Santrampur", "Virpur"]},
+            "Mehsana": {"cities": ["Becharaji", "Jotana", "Kadi", "Kheralu", "Mehsana", "Satlasana", "Unjha", "Vijapur", "Visnagar"]},
+            "Morbi": {"cities": ["Halvad", "Morbi", "Maliya", "Tankara", "Wankaner"]},
+            "Narmada": {"cities": ["Dediapada", "Garudeshwar", "Nandod", "Sagbara", "Tilakwada"]},
+            "Navsari": {"cities": ["Chikhli", "Gandevi", "Jalalpore", "Khergam", "Navsari", "Vansda"]},
+            "Panchmahal": {"cities": ["Ghoghamba", "Godhra", "Halol", "Jambughoda", "Kalol", "Morwa Hadaf", "Shehera"]},
+            "Patan": {"cities": ["Chanasma", "Harij", "Patan", "Radhanpur", "Sami", "Sidhpur"]},
+            "Porbandar": {"cities": ["Kutiyana", "Porbandar", "Ranavav"]},
+            "Rajkot": {"cities": ["Dhoraji", "Gondal", "Jamkandorna", "Jasdan", "Jetpur", "Kotda Sangani", "Lodhika", "Morbi", "Rajkot", "Upleta", "Wankaner"]},
+            "Sabarkantha": {"cities": ["Bayad", "Dhansura", "Himatnagar", "Idar", "Khedbrahma", "Poshina", "Prantij", "Talod", "Vijaynagar"]},
+            "Surat": {"cities": ["Bardoli", "Choryasi", "Kamrej", "Mahuva", "Mandvi", "Mangrol", "Olpad", "Palsana", "Umarpada"]},
+            "Surendranagar": {"cities": ["Chotila", "Dhrangadhra", "Halvad", "Lakhtar", "Limbdi", "Muli", "Patdi", "Sayla", "Thangadh", "Wadhwan"]},
+            "Tapi": {"cities": ["Dolvan", "Nizar", "Songadh", "Uchchhal", "Valod", "Vyara"]},
+            "Vadodara": {"cities": ["Dabhoi", "Karjan", "Padra", "Savli", "Vadodara", "Waghodia"]},
+            "Valsad": {"cities": ["Dharampur", "Kaprada", "Pardi", "Umbergaon", "Valsad", "Vapi"]}
+        };
+        const districtSelect = document.getElementById('district');
+        const citySelect = document.getElementById('city');
+    
+        // Populate Districts
+        for (let district in districtData) {
+            const option = document.createElement('option');
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+        }
+    
+        // Populate Cities based on District Selection
+        districtSelect.addEventListener('change', () => {
+            citySelect.innerHTML = '<option>Select City</option>'; // Reset previous cities
+            const selectedDistrict = districtSelect.value;
+    
+            if (districtData[selectedDistrict]) {
+                districtData[selectedDistrict].cities.forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        });
+    
+        function filterResults() {
+            const district = districtSelect.value;
+            const city = citySelect.value;
+    
+            if (district === "Select District" || city === "Select City") {
+                alert("Please select both District and City");
+            } else {
+                alert(`Searching Blood Banks in ${city}, ${district}`);
+                // Here you can fetch data from your database or API
+            }
+        }
+    </script>
+     
+    
+    <section class="main2">
+            <div class="tbl">
+                <table border="1" class="table-wrapper">
+                    <thead>
+                        <tr colspan="100">
+                            <th>Sr. No</th>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bloodBankTable">
+                        <tr>
+                            <td colspan="8" class="text-center">No data available in table</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    </section>
+
+</body>
+</html>

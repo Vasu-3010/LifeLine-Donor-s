@@ -1,0 +1,414 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginpage.html"); // redirect to login if not logged in
+    exit();
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looking Blood</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-left: 20px;
+            font-family: 'Satisfy', cursive;
+            background: linear-gradient(to right, rgb(245, 2, 2), rgb(245, 2, 2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        nav {
+            background-color: black;
+            padding: 20px;
+            margin: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .main1, .main2{
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            margin: 50px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .main3{
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 900px;
+            margin: 50px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .order-confirmation {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control, select, .user-input {
+        font-family: Calibri;
+        width: 30%;
+        padding: 10px;
+        margin: 5px auto;
+        border: none;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.402);
+        }
+
+        .q{
+            width: 50px;
+        }
+        .form-control, select {
+            font-family: Calibri;
+            width: 30%;
+            padding: 10px;
+            margin: 5px auto;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.402);
+        }
+        .bt {
+            background: linear-gradient(45deg, #800080, #ff4444);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin-top: 1rem;
+        }
+        .bt:hover {
+            background: linear-gradient(45deg, #ff4444, #800080);
+            transform: scale(1.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Lifeline Donor's</div>
+        </nav>
+    </header>
+
+    <section class="main1">
+        <h2>Blood Storage Unit (BSU)</h2>
+        <label>District</label><br>
+        <select id="district" class="form-control" onchange="updateCities()">
+            <option>Select District</option>
+        </select><br>
+
+        <label>City</label><br>
+        <select id="city" class="form-control">
+            <option>Select City</option>
+        </select><br>
+
+        <button class="bt" onclick="filterResults()">Search</button>
+    </section>
+
+    <section class="main2">
+        <table>
+            <thead>
+                <tr>
+                    <th>Hospital Name</th>
+                    <th>A+</th>
+                    <th>A-</th>
+                    <th>B+</th>
+                    <th>B-</th>
+                    <th>AB+</th>
+                    <th>AB-</th>
+                    <th>O+</th>
+                    <th>O-</th>
+                    <th>Select Hospital</th>
+                </tr>
+            </thead>
+                <tbody id="bloodBankTable">
+                <tr><td colspan="10">No data available</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+
+    <section class="main3">
+        <table>
+            <thead>
+                <tr>
+                    <th>Hospital Name</th>
+                    <th>A+</th>
+                    <th>A-</th>
+                    <th>B+</th>
+                    <th>B-</th>
+                    <th>AB+</th>
+                    <th>AB-</th>
+                    <th>O+</th>
+                    <th>O-</th>
+                </tr>
+            </thead>
+            <tbody id="bloodBankTable">
+                <tr>
+                    <td id="selectedHospitalName"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                    <td><input class="q" type="number" name="quantity" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);"></td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <button class="bt" id="orderBtn" name="purchase">Order Now</button>
+    </section>
+
+    <section class="order-confirmation" id="orderConfirmation">
+    <h2>Confirm Your Order</h2>
+    <div>
+      <h3>Hospital: <span id="confirmHospitalName"></span></h3>
+      <table>
+        <thead>
+          <tr><th>Blood Group</th><th>Quantity</th></tr>
+        </thead>
+        <tbody id="orderSummary"></tbody>
+      </table>
+    </div>
+    <div style="margin: 20px 0;">
+      <input type="text" id="customerName" class="user-input" placeholder="Your Name">
+      <br>
+      <input type="tel" id="customerMobile" class="user-input" placeholder="Mobile Number">
+    </div>
+    <button class="bt" id="confirmOrderBtn">Confirm Order</button>
+    <button class="bt" onclick="hideConfirmation()" >Cancel</button>
+  </section>
+
+    <script>
+        const districtData = {
+                "Ahmedabad": ["Ahmedabad City", "Bavla", "Daskroi", "Dhandhuka", "Dholera", "Dholka", "Mandal", "Sanand", "Viramgam"],
+                "Amreli": ["Amreli", "Bagasara", "Dhari", "Jafrabad", "Khambha", "Kukavav", "Lathi", "Rajula", "Savarkundla"],
+                "Anand": ["Anand", "Borsad", "Petlad", "Khambhat", "Sojitra", "Tarapur", "Umreth", "Anklav"],
+                "Aravalli": ["Bayad", "Bhiloda", "Dhansura", "Malpur", "Meghraj", "Modasa"],
+                "Banaskantha": ["Amirgadh", "Bhabhar", "Danta", "Deesa", "Dhanera", "Dantiwada", "Kankrej", "Lakhani", "Palanpur", "Suigam", "Tharad", "Vadgam", "Vav"],
+                "Bharuch": ["Amod", "Ankleshwar", "Bharuch", "Hansot", "Jambusar", "Jhagadia", "Netrang", "Vagra", "Valia"],
+                "Bhavnagar": ["Bhavnagar", "Botad", "Gadhada", "Ghogha", "Jesar", "Mahuva", "Palitana", "Sihor", "Talaja", "Umrala"],
+                "Botad": ["Botad", "Gadhada", "Barvala", "Ranpur"],
+                "Chhota Udaipur": ["Bodeli", "Chhota Udaipur", "Kavant", "Naswadi", "Pavi Jetpur", "Sankheda"],
+                "Dahod": ["Dahod", "Devgad Baria", "Dhanpur", "Fatepura", "Garbada", "Limkheda", "Santrampur", "Jhalod"],
+                "Dang": ["Ahwa", "Subir", "Waghai"],
+                "Devbhoomi Dwarka": ["Bhanvad", "Dwarka", "Khambhalia", "Kalyanpur"],
+                "Gandhinagar": ["Dehgam", "Gandhinagar", "Kalol", "Mansa"],
+                "Gir Somnath": ["Gir Gadhada", "Kodinar", "Sutrapada", "Talala", "Una", "Veraval"],
+                "Jamnagar": ["Dhrol", "Jamjodhpur", "Jamnagar", "Jodiya", "Kalavad", "Lalpur"],
+                "Junagadh": ["Bhesan", "Junagadh", "Keshod", "Malia", "Manavadar", "Mangrol", "Mendarda", "Vanthali", "Visavadar"],
+                "Kheda": ["Kheda", "Kapadvanj", "Kathlal", "Matar", "Mehmedabad", "Mahudha", "Nadiad", "Thasra", "Virpur"],
+                "Kutch": ["Abdasa", "Anjar", "Bhachau", "Bhuj", "Gandhidham", "Lakhpat", "Mandvi", "Mundra", "Nakhatrana", "Rapar"],
+                "Mahisagar": ["Balasinor", "Kadana", "Khanpur", "Lunawada", "Santrampur", "Virpur"],
+                "Mehsana": ["Becharaji", "Jotana", "Kadi", "Kheralu", "Mehsana", "Satlasana", "Unjha", "Vijapur", "Visnagar"],
+                "Morbi": ["Halvad", "Morbi", "Maliya", "Tankara", "Wankaner"],
+                "Narmada": ["Dediapada", "Garudeshwar", "Nandod", "Sagbara", "Tilakwada"],
+                "Navsari": ["Chikhli", "Gandevi", "Jalalpore", "Khergam", "Navsari", "Vansda"],
+                "Panchmahal": ["Ghoghamba", "Godhra", "Halol", "Jambughoda", "Kalol", "Morwa Hadaf", "Shehera"],
+                "Patan": ["Chanasma", "Harij", "Patan", "Radhanpur", "Sami", "Sidhpur"],
+                "Porbandar": ["Kutiyana", "Porbandar", "Ranavav"],
+                "Rajkot": ["Dhoraji", "Gondal", "Jamkandorna", "Jasdan", "Jetpur", "Kotda Sangani", "Lodhika", "Morbi", "Rajkot", "Upleta", "Wankaner"],
+                "Sabarkantha": ["Bayad", "Dhansura", "Himatnagar", "Idar", "Khedbrahma", "Poshina", "Prantij", "Talod", "Vijaynagar"],
+                "Surat": ["Bardoli", "Choryasi", "Kamrej", "Mahuva", "Mandvi", "Mangrol", "Olpad", "Palsana", "Umarpada"],
+                "Surendranagar": ["Chotila", "Dhrangadhra", "Halvad", "Lakhtar", "Limbdi", "Muli", "Patdi", "Sayla", "Thangadh", "Wadhwan"],
+                "Tapi": ["Dolvan", "Nizar", "Songadh", "Uchchhal", "Valod", "Vyara"],
+                "Vadodara": ["Dabhoi", "Karjan", "Padra", "Savli", "Vadodara", "Waghodia"],
+                "Valsad": ["Dharampur", "Kaprada", "Pardi", "Umbergaon", "Valsad", "Vapi"]
+            };
+    
+window.onload = () => {
+      const district = document.getElementById("district");
+      for (let key in districtData) {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = key;
+        district.appendChild(opt);
+      }
+    };
+
+    function updateCities() {
+      const city = document.getElementById("city");
+      city.innerHTML = `<option>Select City</option>`;
+      const selected = document.getElementById("district").value;
+      if (districtData[selected]) {
+        districtData[selected].forEach(c => {
+          let opt = document.createElement("option");
+          opt.value = c;
+          opt.textContent = c;
+          city.appendChild(opt);
+        });
+      }
+    }
+
+function filterResults() {
+            let district = document.getElementById("district").value;
+            let city = document.getElementById("city").value;
+
+            if (district === "Select District" || city === "Select City") {
+                alert("Please select district and city");
+                return;
+            }
+
+            fetch(`lookblood.php?district=${encodeURIComponent(district)}&city=${encodeURIComponent(city)}`)
+                .then(res => res.json())
+                .then(data => {
+                    const table = document.getElementById("bloodBankTable");
+                    table.innerHTML = "";
+
+                    if (data.length === 0) {
+                        table.innerHTML = `<tr><td colspan="9">No data found</td></tr>`;
+                        return;
+                    }
+
+                    data.forEach(row => {
+                        table.innerHTML += `
+                            <tr>
+                                <td>${row["Hospital Name"]}</td>
+                                <td>${row["A+"]}</td>
+                                <td>${row["A-"]}</td>
+                                <td>${row["B+"]}</td>
+                                <td>${row["B-"]}</td>
+                                <td>${row["AB+"]}</td>
+                                <td>${row["AB-"]}</td>
+                                <td>${row["O+"]}</td>
+                                <td>${row["O-"]}</td>
+                                <td><button class='bt' onclick="selectHospital('${row["Hospital Name"]}')">Purchase Blood</button></td>
+                            </tr>
+                        `;
+                    });
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                });
+        }
+
+    function selectHospital(name) {
+      document.getElementById("selectedHospitalName").textContent = name;
+      document.querySelector(".main3").scrollIntoView({ behavior: "smooth" });
+    }
+
+    document.getElementById("orderBtn").addEventListener("click", () => {
+    const hospital = document.getElementById("selectedHospitalName").textContent;
+    if (!hospital) {
+        alert("Please select a hospital first.");
+        return;
+    }
+
+    const inputs = document.querySelectorAll(".main3 input.q");
+    const bloodTypes = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+    let order = [];
+
+    inputs.forEach((input, i) => {
+        const qty = parseInt(input.value) || 0;
+        if (qty > 0) {
+            order.push({ bloodType: bloodTypes[i], quantity: qty });
+        }
+    });
+
+    if (order.length === 0) {
+        alert("Please select at least one unit.");
+        return;
+    }
+
+    // Fill confirmation section
+    document.getElementById("confirmHospitalName").textContent = hospital;
+    const summary = document.getElementById("orderSummary");
+    summary.innerHTML = "";
+    order.forEach(item => {
+        summary.innerHTML += `<tr><td>${item.bloodType}</td><td>${item.quantity}</td></tr>`;
+    });
+
+    document.getElementById("orderConfirmation").scrollIntoView({ behavior: "smooth" });
+});
+
+document.getElementById("confirmOrderBtn").addEventListener("click", function() {
+    const name = document.getElementById("customerName").value;
+    const mobile = document.getElementById("customerMobile").value;
+    const hospital = document.getElementById("confirmHospitalName").textContent;
+    
+    if (!name || !mobile) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    // Get quantities from the order summary table
+    const quantities = {};
+    const rows = document.getElementById("orderSummary").getElementsByTagName("tr");
+    for (let row of rows) {
+        const cells = row.getElementsByTagName("td");
+        if (cells.length === 2) {
+            quantities[cells[0].textContent] = parseInt(cells[1].textContent) || 0;
+        }
+    }
+    // Create form data
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('mobile', mobile);
+    formData.append('hospital', hospital);
+    formData.append('quantities', JSON.stringify(quantities));
+
+    // Send data to server
+    fetch('store_order.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Your blood purchase request has been placed Successfully");
+            window.location.href = "Home Page Code.html";
+        } else {
+            alert("Error placing order: " + (data.error || "Unknown error"));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("Error placing order. Please try again.");
+    });
+});
+
+    function hideConfirmation() {
+      document.getElementById("orderConfirmation").style.display = "none";
+    }
+
+</script>
+
+</body>
+</html>

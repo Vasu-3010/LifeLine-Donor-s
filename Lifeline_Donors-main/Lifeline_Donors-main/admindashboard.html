@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Lifeline Donor's</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+        }
+
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #b71c1c;
+            padding: 10px 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ffd54f;
+        }
+
+        .dashboard-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .dashboard-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #b71c1c;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-left: 20px;
+            font-family: 'Satisfy', cursive;
+            background: linear-gradient(to right, rgb(245, 2, 2), rgb(245, 2, 2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .card .counter {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Individual card colors */
+        .donors-card {
+            background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+        }
+
+        .bloodcenters-card {
+            background: linear-gradient(135deg, #FF5722 0%, #FF8A65 100%);
+        }
+
+        .camps-card {
+            background: linear-gradient(135deg, #2196F3 0%, #64B5F6 100%);
+        }
+
+        .users-card {
+            background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%);
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .plus-sign {
+            font-size: 24px;
+            vertical-align: super;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <h1 id="logo">Lifeline Donor's</h1>
+    </header>
+
+    <nav>
+        <a href="admindashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="admin_donors.html"><i class="fas fa-users"></i> Manage Donors</a>
+        <a href="admin_inventory.html"><i class="fas fa-vial"></i> Blood Inventory</a>
+        <a href="admin_camps.html"><i class="fas fa-hospital"></i> Manage Camps</a>
+        <a href="admin_users.html"><i class="fas fa-user-cog"></i> Manage Users</a>
+        <a href="admin_reports.html"><i class="fas fa-chart-bar"></i> Reports</a>
+        <a href="Home Page Code.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
+    <section class="dashboard-section">
+        <h2>Welcome Admin</h2>
+        <div class="dashboard-cards">
+            <div class="card donors-card" onclick="window.location.href='admin_donors.html'">
+                <div class="card-icon"><i class="fas fa-hand-holding-heart"></i></div>
+                <h3>Total Donors</h3>
+                <div class="counter" id="donors-counter">0</div>
+            </div>
+
+            <div class="card camps-card" onclick="window.location.href='admin_camps.html'">
+                <div class="card-icon"><i class="fas fa-medkit"></i></div>
+                <h3>Upcoming Camps</h3>
+                <div class="counter" id="camps-counter">0</div>
+            </div>
+            <div class="card users-card" onclick="window.location.href='admin_users.html'">
+                <div class="card-icon"><i class="fas fa-user-friends"></i></div>
+                <h3>Registered Users</h3>
+                <div class="counter" id="users-counter">0</div>
+            </div>
+            <div class="card" style="background: linear-gradient(135deg, #e53935 0%, #e35d5b 100%);" onclick="window.location.href='admin_blood_requests.php'">
+                <div class="card-icon"><i class="fas fa-tint"></i></div>
+                <h3>Manage Blood Requests</h3>
+                <div class="counter" id="blood-requests-counter">0</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-section">
+        <h2>Quick Actions</h2>
+        <div class="dashboard-cards">
+            <div class="card" style="background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);" onclick="window.location.href='admin_inventory.html'">
+                <div class="card-icon"><i class="fas fa-vial"></i></div>
+                <h3>Check Blood Inventory</h3>
+                <p>View and manage blood stock levels</p>
+            </div>
+            <div class="card" style="background: linear-gradient(135deg, #00BCD4 0%, #4DD0E1 100%);" onclick="window.location.href='admin_reports.html'">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>View Analytics</h3>
+                <p>Check donation trends and statistics</p>
+            </div>
+            <div class="card" style="background: linear-gradient(135deg, #8BC34A 0%, #AED581 100%);" onclick="window.location.href='admin_camps.html'">
+                <div class="card-icon"><i class="fas fa-calendar-plus"></i></div>
+                <h3>Schedule Camp</h3>
+                <p>Create new blood donation camps</p>
+            </div>
+            <div class="card" style="background: linear-gradient(135deg, #9C27B0 0%, #BA68C8 100%);" onclick="window.location.href='admin_users.html'">
+                <div class="card-icon"><i class="fas fa-user-plus"></i></div>
+                <h3>Add New User</h3>
+                <p>Register new staff members</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Animation duration in milliseconds
+        const animationDuration = 2000;
+        // Start delay in milliseconds
+        const startDelay = 500;
+        
+        // Target values for each counter
+        const targetValues = {
+            donors: 91,
+            bloodcenters: 100,
+            camps: 3,
+            users: 500
+        };
+        
+        // Animation function
+        function animateCounter(elementId, target, hasPlus = false) {
+            const element = document.getElementById(elementId);
+            const start = 0;
+            const increment = target / (animationDuration / 16); // 60fps
+            
+            let current = start;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(timer);
+                    current = target;
+                }
+                element.textContent = Math.floor(current) + (hasPlus ? '+' : '');
+            }, 16);
+        }
+
+        // Fetch blood requests count
+        function fetchBloodRequestsCount() {
+            fetch('get_blood_requests_count.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.count !== undefined) {
+                        animateCounter('blood-requests-counter', data.count, true);
+                    } else {
+                        console.error('Failed to get blood requests count');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching blood requests count:', error);
+                });
+        }
+        
+        // Start all animations after a short delay
+        setTimeout(() => {
+            animateCounter('donors-counter', targetValues.donors, true);
+            animateCounter('bloodcenters-counter', targetValues.bloodcenters, true);
+            animateCounter('camps-counter', targetValues.camps);
+            animateCounter('users-counter', targetValues.users, true);
+            fetchBloodRequestsCount(); // Fetch and animate blood requests count
+        }, startDelay);
+        
+        // Optional: Add intersection observer to trigger animation when scrolled into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counterId = entry.target.querySelector('.counter').id;
+                    if (counterId === 'blood-requests-counter') {
+                        fetchBloodRequestsCount();
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe all counter elements
+        document.querySelectorAll('.card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+
+</html>

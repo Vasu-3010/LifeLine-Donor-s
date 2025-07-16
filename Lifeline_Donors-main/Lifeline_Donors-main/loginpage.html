@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+    <style>
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            margin-left: 20px;
+            font-family: 'Satisfy', cursive;
+            background: linear-gradient(to right,rgb(245,2,2),rgb(245, 2, 2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: black;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+        .close:hover {
+            color: #ff4444;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.4);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        nav {
+            background: linear-gradient(45deg,#2f3b45,#2f3b45);
+            padding: 20px;
+            margin: -20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .main {
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            text-align:center;
+            width: 400px;
+            height: 550px;
+            margin: 50px auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        @media screen and (max-width: 768px) {
+            .main {
+                width: 95%;
+                margin: 80px auto;
+                padding: 1.5rem;
+            }
+        }
+
+        .bt {
+            background: linear-gradient(45deg, #800080, #ff4444);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bt:hover {
+            background: linear-gradient(45deg, #ff4444, #800080);
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .bt:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .li:hover{
+            -webkit-text-fill-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">Lifeline Donor's</div>
+        </nav>
+    </header>
+
+    <section class="main">
+        <div class="First">
+            <span class="close" onclick="window.location.href='Home Page Code.html'">&times;</span>
+            <h1>Hi, Welcome Back !!</h1>
+            <h3>Login to continue</h3>
+            <form action="login.php" method="POST"></form>
+            <form id="loginForm" onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label for="username" style="font-size:larger">Username</label><br>
+                    <input type="text" id="username" name="username" style="font-family: Calibri; width: 60%;padding: 10px;margin-top: 5px;border: none;border-radius: 100px;background: rgba(255, 255, 255, 0.402);" placeholder="Enter username">
+                    <div class="error" id="usernameError"></div><br>
+                </div>
+
+                <div class="form-group">         
+                    <label for="password" style="font-size:larger">Password</label><br>
+                    <input type="password" id="password" name="password" style="font-family: Calibri; width: 60%; padding: 10px;margin-top: 5px;border: none;border-radius:50px; background: rgb(255,255,255,0.402);" placeholder="Enter Password">
+                    <div class="error" id="passwordError"></div><br>
+                </div>
+            
+                <a class="li" href="forgatpass.html" style="color: rgb(29, 42, 54);font-size:small;">forgot password ?</a><br>
+                <br>
+                <button class="bt" type="submit">Login</button><br><br>
+
+                Do not have Account ?
+                <a class="li" href="signuppage.html" style="color:rgb(29,42,54);font-size:small;">Sign up</a>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            if (validateLoginForm()) {
+                const formData = new FormData(document.getElementById('loginForm'));
+                
+                try {
+                    const response = await fetch('login.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        alert("Login successful!");
+                        window.location.href = "Home Page Code.html"; // Redirect to home page
+                    } else {
+                        alert(result.message || "Login failed. Please try again.");
+                    }
+                } catch (error) {
+                    alert("Network error: " + error);
+                }
+            }
+        }
+
+        function validateLoginForm() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let isValid = true;
+
+            // Reset error messages
+            document.getElementById('usernameError').innerText = '';
+            document.getElementById('passwordError').innerText = '';
+
+            if (username === '') {
+                document.getElementById('usernameError').innerText = 'Username is required.';
+                isValid = false;
+            }
+
+            if (password === '') {
+                document.getElementById('passwordError').innerText = 'Password is required.';
+                isValid = false;
+            } else if (password.length < 6) {
+                document.getElementById('passwordError').innerText = 'Password must be at least 6 characters.';
+                isValid = false;
+            }
+            return isValid;
+        }
+        // For example, after successful login:
+localStorage.setItem("isLoggedIn", "true");
+
+// Optionally store username, token, etc.
+
+    </script>
+</body>
+</html>
